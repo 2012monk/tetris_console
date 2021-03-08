@@ -1,28 +1,19 @@
+import java.io.IOException;
+
 public class Panel {
     private String[][] panel;
-    private final String[][] origin;
 
-    public Panel(int x){
-        this.origin = new String[15][10];
-
-        for (int i=0; i< 15; i++){
-            for (int j=0; j< 10; j++){
-                if (0 < i && i < 14 && 0 < j && j < 9)
-                    origin[i][j] = " ";
-                else{
-                    this.origin[i][j] = "@";
-                }
-            }
-        }
-    }
 
     public Panel(){
-        this.origin = null;
-        this.panel = new String[15][10];
+        this(40, 10);
+    }
 
-        for (int i=0; i< 15; i++){
-            for (int j=0; j< 10; j++){
-                if (0 < i && i < 14 && 0 < j && j < 9)
+    public Panel(int height, int width){
+        this.panel = new String[height][width];
+
+        for (int i=0; i< height; i++){
+            for (int j=0; j< width; j++){
+                if (0 < i && i < height - 1 && 0 < j && j < width - 1)
                     this.panel[i][j] = " ";
                 else{
                     this.panel[i][j] = "@";
@@ -31,28 +22,7 @@ public class Panel {
         }
     }
 
-    public void initPanel(){
-        this.panel = origin.clone();
-    }
 
-    public Panel(int height, int width, String[][] origin){
-        this.origin = origin;
-        setPanel(height, width);
-    }
-
-//    public void setPanel(){
-//        this.origin = new String[15][10];
-//
-//        for (int i=0; i< 15; i++){
-//            for (int j=0; j< 10; j++){
-//                if (0 < i && i < 14 && 0 < j && j < 9)
-//                    origin[i][j] = " ";
-//                else{
-//                    this.origin[i][j] = "@";
-//                }
-//            }
-//        }
-//    }
 
     public void setPanel(int height, int width){
         panel = new String[height][width];
@@ -67,15 +37,29 @@ public class Panel {
         }
     }
 
+
+
     public String[][] getPanel(){
         return panel;
     }
 
 
-    public int addstr(int y, int x, String s){
-        panel[y][x] = s;
-        return 0;
+    public void addstr(int y, int x, String s){
+        if (s.length() == 1) panel[y][x] = s;
+        try {
+            if (x + s.length() < panel.length) {
+                for (int i = x; i < x + s.length(); i++) {
+                    panel[y][i] = String.valueOf(s.charAt(i-x));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("index Err");
+        }
+
     }
+
+
 
     public boolean isEmpty(int x, int y){
         if (panel[x][y] != null){
@@ -87,11 +71,6 @@ public class Panel {
     public boolean isEmpty(int x, int y, String s){
         return panel[x][y].equals(s);
     }
-
-
-//    public HashSet<int[]> getBORDER(){
-//        return BORDER;
-//    }
 
 
 
